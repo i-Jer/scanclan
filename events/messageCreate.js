@@ -113,7 +113,7 @@ module.exports = {
 	async execute(message) {
 		if(!message.attachments.size) return;
         let msg_attachments = message.attachments;
-        console.log(msg_attachments);
+        // console.log(msg_attachments);
 		message.attachments.forEach(async attachment => {
 			scan(message, attachment);
 		});
