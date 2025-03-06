@@ -72,6 +72,9 @@ async function scan(message, attachment){
 
 		
 	} catch (error) {
+		if(error.response){
+			if(error.response.data.error.code == "NotFoundError") sent_msg.edit({ content: "File not found", embeds: [] });
+		}
 		console.error('Error scanning file:', error.response ? error.response.data : error.message);
 	}
 }

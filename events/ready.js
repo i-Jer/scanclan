@@ -6,6 +6,6 @@ module.exports = {
 	execute(client) {
 		console.log(`Bot Ready! Logged in as ${client.user.tag}`);
         require("../handlers/CommandRegister.js");
-		client.user.setActivity(`I hate malware - metal rock`, { type: ActivityType.Listening });
+		client.user.setActivity(`viruses`, { type: ActivityType.Watching });
 	},
 };
