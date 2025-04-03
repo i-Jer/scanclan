@@ -1,19 +1,15 @@
 const { Events, StringSelectMenuOptionBuilder, StringSelectMenuBuilder, ActionRowBuilder,
     	ButtonBuilder, ButtonStyle, EmbedBuilder, SlashCommandBuilder, ChannelType } = require('discord.js');
 const Client = require("../handlers/ClientStart.js");
-const Discord = require('discord.js');
 const axios = require('axios');
-const FormData = require('form-data');
-const path = require('path');
-const { send } = require('process');
 const crypto = require('crypto');
-const API_KEY = '72e87a0cbb0c6a932e88e34bed12787c432bec99bf1ecbbdf06559bdeb2d97fd';
+const config = require("../configs/config.json");
+const API_KEY = config.APIKEY; // virustotal api key
 
 async function getSHA256FromUrl(url) {
 	// Send GET request with responseType 'stream'
 	const response = await axios.get(url, { responseType: 'stream' });
 	const hash = crypto.createHash('sha256');
-  
 	// Return a Promise that resolves when the stream has ended and the hash computed
 	return new Promise((resolve, reject) => {
 		response.data.on('data', (chunk) => {
@@ -52,7 +48,6 @@ async function scan(message, attachment){
 				'x-apikey': API_KEY
 			}
 		});
-		// console.log('File report:', final_report.data.data.attributes.last_analysis_results);
 		
 		const filteredEntries = Object.entries(final_report.data.data.attributes.last_analysis_results).filter( ([, details]) =>
 			details.category !== 'type-unsupported' && details.category !== 'timeout'
@@ -68,28 +63,27 @@ async function scan(message, attachment){
 				return 1;
 			return 0;
 		});
-		send_details(message, messageContent, filteredEntries, sent_msg);
+		send_details(messageContent, filteredEntries, sent_msg);
 
 		
 	} catch (error) {
 		if(error.response){
-			if(error.response.data.error.code == "NotFoundError") sent_msg.edit({ content: "File not found", embeds: [] });
+			if(error.response.data.error.code == "NotFoundError") sent_msg.edit({ content: "File is not available in VirusTotal Database", embeds: [] });
 		}
 		console.error('Error scanning file:', error.response ? error.response.data : error.message);
 	}
 }
 
-function send_details(message, messageContent, filteredEntries, sent_msg){
-	// Loop over each antivirus result using Object.entries
+function send_details(messageContent, filteredEntries, sent_msg){
+	// Loop over each antivirus result
 	let red = 0;
 	let total_cnt = 0;
 	const reportLines = filteredEntries.map(([vendor, details]) => {
-		if (details.category === 'malicious' && details.result) {
+        total_cnt++;
+		if(details.category === 'malicious' && details.result) {
 			red++;
-			total_cnt++;
 			return `**${vendor}:** ${details.result} 🔴`;
 		}
-		total_cnt++;
 		return `**${vendor}:** 🟢`;
 	});
 	messageContent += reportLines.join('\n');
@@ -115,8 +109,6 @@ module.exports = {
 	once: false,
 	async execute(message) {
 		if(!message.attachments.size) return;
-        let msg_attachments = message.attachments;
-        // console.log(msg_attachments);
 		message.attachments.forEach(async attachment => {
 			scan(message, attachment);
 		});

@@ -5,7 +5,6 @@ module.exports = {
 	once: true,
 	execute(client) {
 		console.log(`Bot Ready! Logged in as ${client.user.tag}`);
-        require("../handlers/CommandRegister.js");
 		client.user.setActivity(`viruses`, { type: ActivityType.Watching });
 	},
 };

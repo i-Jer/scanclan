@@ -1,10 +1,7 @@
-const Discord = require("discord.js");
-require('dotenv').config();
 const Client = require("./handlers/ClientStart.js");
 const client = new Client();
 // start bot
 client.start();
-
 // AntiCrash
 process.on("unhandledRejection", (reason, p) => {
     console.log("unhandledRejection");

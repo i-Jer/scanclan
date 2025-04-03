@@ -1,6 +1,6 @@
 {
-  "name": "auto-report",
-  "version": "1.0.1",
+  "name": "scanclan",
+  "version": "1.1.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -10,12 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^1.7.9",
-    "clamdjs": "^1.0.2",
     "crypto": "^1.0.1",
     "discord.js": "^14.16.3",
-    "dotenv": "^16.4.5",
-    "form-data": "^4.0.1",
-    "luxon": "^3.5.0",
     "node-fetch": "^3.3.2"
   }
 }
