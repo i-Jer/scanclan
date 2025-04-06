@@ -19,6 +19,7 @@ async function getSHA256FromUrl(url) {
 			// Finalize and get the hash in hex format
 			const sha256 = hash.digest('hex');
 			resolve(sha256);
+            response.data.destroy();
 		});
 		response.data.on('error', (error) => {
 			reject(error);
