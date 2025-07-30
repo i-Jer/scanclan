@@ -1,4 +1,4 @@
 {
-    "token": "secret",
-    "APIKEY": "secret"
+    "token": "input discord bot token here",
+    "APIKEY": "input virustotal api key here"
 }
